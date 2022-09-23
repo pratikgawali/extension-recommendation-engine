@@ -16,17 +16,20 @@ def hello_world():
 
 @app.route('/recommend', methods=['GET'])
 def recommend_extensions():
-    installed_extensions = request.args.get("installed_extensions").split(',')
-    recommended_extensions = get_recommendations(installed_extensions)
-    
-    result = []
-    for extension in recommended_extensions:
-        if extension not in installed_extensions:
-            result.append(extension)
-            if len(result) > MAX_NUMBER_OF_RECOMMENDATIONS:
-                break
+    try:
+        installed_extensions = request.args.get("installed_extensions").split(',')
+        recommended_extensions = get_recommendations(installed_extensions)
         
-    return result
+        result = []
+        for extension in recommended_extensions:
+            if extension not in installed_extensions:
+                result.append(extension)
+                if len(result) > MAX_NUMBER_OF_RECOMMENDATIONS:
+                    break
+            
+        return result
+    except:
+        return "Something went wrong. Please contact admin."
 
 def get_recommendations(installed_extensions):
 
@@ -40,7 +43,7 @@ def get_recommendations(installed_extensions):
         similarity_scores_list = similarity_scores_list.append(similarity_score)
     
     # sum the similarity scores for each installed extension & sort to keep the max scored extension first
-    similarity_scores_list.sum().sort_values(ascending=False)
-    return similarity_scores_list
+    similarity_scores_list = similarity_scores_list.sum().sort_values(ascending=False)
+    return similarity_scores_list.index
 
 app.run(host="0.0.0.0")

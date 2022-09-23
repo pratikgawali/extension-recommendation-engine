@@ -2,8 +2,10 @@ import sys
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 
+INPUT_DATASET_FILE_NAME = "dataset.csv"
+
 # Read installed extensions data
-installed_extensions_data = pd.read_csv("dataset-limit.csv",index_col=0)
+installed_extensions_data = pd.read_csv(INPUT_DATASET_FILE_NAME, index_col=0)
 
 # Apply cosine similarity -> gives scores on similarity of items
 extension_similarity = cosine_similarity(installed_extensions_data.T)
